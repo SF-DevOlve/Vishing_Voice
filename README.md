@@ -1,5 +1,6 @@
 # Voicebot for testing vishing
-![Voicebot Icon]([https://cdn-icons-png.flaticon.com/512/8090/8090687.png](https://nordvpn.com/wp-content/uploads/blog-social-what-is-vishing-1200x628-1.png))
+![image](https://github.com/SF-DevOlve/Vishing_Voice/assets/114484969/7cd5eada-0aef-4986-8b47-066048875df0)
+
 ## Overview
 This project aims to develop a voice-based interaction system (voicebot) using Python, Flask, and various other libraries for handling audio processing, speech recognition, and database operations. The voicebot is designed to recognize spoken commands in multiple languages (English, French, Arabic) and perform corresponding actions based on the detected commands.
 
