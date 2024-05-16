@@ -112,7 +112,10 @@ def perform_action():
         # actioncodes = [row[f"action_code"] for row in rows]
         # actions = [row[f"action_text"] for row in rows]
         # ordercodes = [row[f"id"] for row in rows]
-        cursor.execute(f"SELECT Orders.*, Categories.category_name FROM Orders INNER JOIN Categories ON Orders.category_id = Categories.category_id")
+        if langue == "fr":
+            cursor.execute(f"SELECT Orders.*, Categories.category_name FROM Orders INNER JOIN Categories ON Orders.category_id = Categories.category_id")
+        elif langue == "ar":
+            cursor.execute(f"SELECT Orders_ar.*, Categories_ar.category_name FROM Orders_ar INNER JOIN Categories_ar ON Orders_ar.category_id = Categories_ar.category_id")
         rows = cursor.fetchall()
         hotwords = [row[f"hotwords"].split(",") for row in rows]
         category_names = [row["category_name"] for row in rows]  # Category names from the joined table
