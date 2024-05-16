@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Backend</title>
+</head>
+<body>
+    <h1>Test API Backend</h1>
+    <div>
+        <button id="recordButton" onclick="startRecording()">Enregistrer / Arrêter Enregistrement</button>
+    </div>
+
+    <!-- Include ResponsiveVoice library -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+
+    <script>
+        let mediaRecorder;
+        let chunks = [];
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = function (event) {
+                        chunks.push(event.data);
+                    }
+                    mediaRecorder.onstop = function () {
+                        const blob = new Blob(chunks, { 'type': 'audio/wav' });
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            const base64data = reader.result.split(',')[1];
+                            sendData(base64data);
+                        }
+                        reader.readAsDataURL(blob);
+                        chunks = [];
+                    }
+                    mediaRecorder.start();
+                    console.log('Enregistrement audio commencé');
+                    document.getElementById('recordButton').textContent = 'Arrêter Enregistrement';
+                    document.getElementById('recordButton').onclick = stopRecording;
+                })
+                .catch(function (err) {
+                    console.error('Impossible d\'accéder au microphone: ', err);
+                });
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+            console.log('Enregistrement audio arrêté');
+            document.getElementById('recordButton').textContent = 'Enregistrer / Arrêter Enregistrement';
+            document.getElementById('recordButton').onclick = startRecording;
+        }
+
+        function sendData(base64data) {
+            const data = {
+                base64data: base64data,
+                provider: 'google',
+                langue: 'francais',  // Langue fixée à l'arabe
+             // Remplacez par votre adresse IP de base de données
+            };
+
+            fetch('http://localhost:5000/voicebot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse de l\'API backend:', data);
+            })
+            .catch((error) => {
+                console.error('Erreur lors de l\'envoi des données:', error);
+            });
+        }
+    </script>   
+</body>
+</html>
