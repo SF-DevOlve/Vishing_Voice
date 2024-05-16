@@ -172,8 +172,7 @@ def perform_action():
             else:
                 print("Command not recognized")
                 return jsonify(
-                    status="error",
-                    error="Command not recognized",
+                    matched_categories=[],
                     langue=langue,
                     text=text.lower(),
                     provider=provider,
